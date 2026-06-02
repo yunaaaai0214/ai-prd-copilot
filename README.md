@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI PRD Copilot
 
-## Getting Started
+AI PRD Copilot 是一个基于 Next.js + TypeScript 的产品需求文档（PRD）审查工具。  
+它会调用 OpenAI Responses API 输出结构化评审结果，并将历史审查保存到 SQLite（Prisma）。
 
-First, run the development server:
+## 技术栈
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- OpenAI Responses API
+- Prisma + SQLite
+
+## 快速开始
+
+1. 安装依赖
+
+```bash
+npm install
+```
+
+2. 配置环境变量（复制 `.env.example` 为 `.env`）
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4.1-mini
+DATABASE_URL="file:./dev.db"
+```
+
+3. 运行数据库迁移并生成 Prisma Client
+
+```bash
+npx prisma migrate dev --name init_review_history
+npx prisma generate
+```
+
+4. 启动开发服务器
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 [http://localhost:3000](http://localhost:3000)。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 主要页面
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/review`：粘贴 PRD 并发起 AI 审查，结果会自动保存到数据库
+- `/history`：查看历史审查列表
+- `/reports/[id]`：查看已保存报告详情
 
-## Learn More
+## 开发命令
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 常见问题
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. 为什么迁移失败？
+- 请确认 `.env` 中 `DATABASE_URL` 已配置，且你在项目根目录运行命令。
 
-## Deploy on Vercel
+2. SQLite 数据库文件在哪里？
+- `DATABASE_URL="file:./dev.db"` 时，数据库文件位于 `prisma/dev.db`。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. 接口报 `OPENAI_API_KEY` 未配置
+- 请在 `.env` 中设置有效的 `OPENAI_API_KEY` 并重启开发服务器。

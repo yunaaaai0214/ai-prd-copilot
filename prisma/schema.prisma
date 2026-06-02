@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  title       String
+  originalPrd String
+  analysisJson Json
+  improvedPrd String
+  createdAt   DateTime @default(now())
+}
